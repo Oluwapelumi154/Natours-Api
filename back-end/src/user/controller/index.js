@@ -4,13 +4,16 @@ const {
   createUser,
   blockUser,
   unblockUser,
-  deleteUser
+  deleteUser,
+  updateUserProfile
 } = require('./user-controller');
+
 module.exports = Object.freeze({
   getUser,
   getUsers,
   createUser,
   blockUser,
   unblockUser,
-  deleteUser
+  deleteUser,
+  updateUserProfile
 });

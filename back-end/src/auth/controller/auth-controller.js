@@ -1,12 +1,15 @@
 /* eslint-disable prettier/prettier */
+
 const { userService } = require('../../user/service');
+
 const {
-  errResponseMsg,
   authResponseMsg,
-  sendEmail
+  errResponseMsg,
+  sendEmail,
+  setCookie,
+  successResponseMsg,
+  verifyJWT
 } = require('../../../utils');
-const { verifyJWT } = require('../../../utils/token');
-const { successResponseMsg } = require('../../../utils/response');
 
 exports.isLoggedIn = async (req, res, next) => {
   const token = req.headers['x-auth-token'];
@@ -55,6 +58,7 @@ exports.login = async (req, res) => {
     req.body
   );
   if (statusCode === 200) {
+    setCookie(res, data.token);
     return authResponseMsg(res, status, statusCode, message, data);
   }
   if (statusCode >= 400) {
@@ -117,7 +121,7 @@ exports.resetPassword = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const { body, user } = req;
-  const { status, statusCode, message } = await userService.update(
+  const { status, statusCode, message } = await userService.updateUserPassword(
     user.userId,
     body
   );

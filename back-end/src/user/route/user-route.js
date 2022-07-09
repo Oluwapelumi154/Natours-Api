@@ -17,13 +17,14 @@ const {
   userId,
   userSignUpCredentials
 } = require('../../../middleware/schema/schema');
+const { updateUser } = require('../controller/user-controller');
 
 router.post('/signup', validate(userSignUpCredentials()), createUser);
 
 router.get('/all', isLoggedIn, guard.admin, getUsers);
 
 router.get('/:userId', validate(userId()), getUser);
-
+router.patch('/updateProfile', isLoggedIn, updateUser);
 router.patch(
   '/:userId/block',
   validate(userId()),

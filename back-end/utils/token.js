@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const crypto = require('crypto');
 
-const { JWT_SECRET_KEY, JWT_EXP_TIME } = process.env;
+const { JWT_SECRET_KEY, JWT_EXP_TIME, JWT_COOKIE_EXPIRES_IN } = process.env;
 
 exports.signJWT = (userId, email) => {
   const token = jwt.sign({ id: userId, email }, JWT_SECRET_KEY, {
@@ -29,3 +29,9 @@ exports.hashToken = (token) => {
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
   return hashedToken;
 };
+
+exports.setCookie = (res, token) =>
+  res.cookie('jwt', token, {
+    expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  });

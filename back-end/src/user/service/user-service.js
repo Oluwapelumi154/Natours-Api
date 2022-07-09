@@ -34,6 +34,18 @@ class userService {
       if (fields.includes('userId')) {
         delete body.userId;
       }
+      if (fields.includes('resetToken')) {
+        delete body.resetToken;
+      }
+      if (fields.includes('resetTokenExp')) {
+        delete body.resetToken;
+      }
+      if (fields.includes('status')) {
+        delete body.status;
+      }
+      if (fields.includes('passwordChangedAt')) {
+        delete body.passwordChangedAt;
+      }
       const user = {
         userId,
         ...body
@@ -217,7 +229,7 @@ class userService {
     }
   }
 
-  static async update(userId, body) {
+  static async updateUserPassword(userId, body) {
     try {
       const user = await userRepository.findById(userId);
       if (!user) {
@@ -236,6 +248,26 @@ class userService {
         password: body.newPassword
       });
       return serviceResponse('success', 200, 'Successfully Updated Password');
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
+
+  static async updateUserProfile(userId, body) {
+    try {
+      const user = await userRepository.findById(userId);
+      if (!user) {
+        return serviceResponse('fail', 400, 'Invalid Id');
+      }
+      user.update({
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        phoneNumber: body.phoneNumber,
+        gender: body.gender,
+        imgUrl: body.imgUrl
+      });
+      return serviceResponse('success', 200, 'Successfully Updated Profile');
     } catch (err) {
       return serviceResponse('fail', 500, 'Internal Server Error');
     }

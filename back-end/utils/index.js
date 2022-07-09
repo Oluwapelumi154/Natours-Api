@@ -9,7 +9,8 @@ const {
   signJWT,
   verifyJWT,
   passwordResetToken,
-  hashToken
+  hashToken,
+  setCookie
 } = require('./token');
 const sendEmail = require('./send-mail');
 
@@ -18,6 +19,7 @@ module.exports = Object.freeze({
   compare,
   errResponseMsg,
   hashToken,
+  setCookie,
   hash,
   passwordResetToken,
   sendEmail,
