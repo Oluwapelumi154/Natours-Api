@@ -18,10 +18,11 @@ const {
   userSignUpCredentials
 } = require('../../../middleware/schema/schema');
 const { updateUser } = require('../controller/user-controller');
+const { bookTour } = require('../../booking/controller');
 
 router.post('/signup', validate(userSignUpCredentials()), createUser);
 
-router.get('/all', isLoggedIn, guard.admin, getUsers);
+router.get('/all', isLoggedIn, getUsers);
 
 router.get('/:userId', validate(userId()), getUser);
 router.patch('/updateProfile', isLoggedIn, updateUser);
@@ -49,4 +50,5 @@ router.delete(
   deleteUser
 );
 
+router.post('/:tourId/book', isLoggedIn, bookTour);
 module.exports = router;

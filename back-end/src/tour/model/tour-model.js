@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       maxGroupSize: {
         type: DataTypes.INTEGER,
@@ -30,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      duration: {
+      durations: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
@@ -59,15 +60,27 @@ module.exports = (sequelize, DataTypes) => {
       imageCover: {
         type: DataTypes.STRING,
         allowNull: false
-      },
-      secretTour: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
       }
-      //   statrtDates:
-      // images
     },
-    { timestamps: true }
+    { timestamps: true, paranoid: true }
   );
+  Tour.associate = (models) => {
+    Tour.hasMany(models.Images, {
+      foreignKey: 'tourId',
+      onDelete: 'CASCADE'
+    });
+    Tour.hasMany(models.Review, {
+      foreignKey: 'tourId',
+      onDelete: 'CASCADE'
+    });
+    Tour.hasMany(models.startDate, {
+      foreignKey: 'tourId',
+      onDelete: 'CASCADE'
+    });
+    Tour.hasMany(models.Booking, {
+      foreignKey: 'tourId',
+      onDelete: 'CASCADE'
+    });
+  };
   return Tour;
 };

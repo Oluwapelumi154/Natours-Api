@@ -1,15 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-  const review = sequelize.define('Review', {
+  const image = sequelize.define('Images', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    comment: {
+    imgUrl: {
       type: DataTypes.STRING,
       allowNull: true
     }
   });
-  return review;
+  return image;
 };

@@ -64,12 +64,16 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true
     }
   );
-  // User.associate = (models) => {
-  //   User.hasMany(models.Tour, {
-  //     foreignKey: 'userId',
-  //     onDelete: 'CASCADE'
-  //   });
-  // };
+  User.associate = (models) => {
+    User.hasMany(models.Booking, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+    User.hasMany(models.Review, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+  };
 
   return User;
 };

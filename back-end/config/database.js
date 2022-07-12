@@ -17,14 +17,7 @@ const sequelize = new Sequelize(
   config
 );
 let subDirs = [];
-const dirToExclude = [
-  'migration',
-  'seeders',
-  'config',
-  'auth',
-  'image',
-  'tour'
-];
+const dirToExclude = ['migration', 'seeders', 'config', 'auth'];
 fs.readdirSync(rootDir).forEach((dir) => {
   const isDir = fs.statSync(path.join(`${rootDir}/${dir}`)).isDirectory();
   if (isDir) {

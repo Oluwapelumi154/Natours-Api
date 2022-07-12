@@ -12,7 +12,6 @@ exports.findAll = async (offset, perPage) => {
     offset,
     perPage,
     raw: true,
-    attributes: { exclude: ['password'] },
     paranoid: false
   });
 
@@ -32,7 +31,7 @@ exports.findByEmail = async (email) => {
   return user;
 };
 
-exports.findByIdAndDelete = async (userId) => {
+exports.deleteById = async (userId) => {
   const user = await models.User.destroy({ where: { userId }, force: true });
   return user;
 };

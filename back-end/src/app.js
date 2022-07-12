@@ -19,4 +19,7 @@ app.use('/api', api);
 app.use('*', (req, res) =>
   errResponseMsg(res, 404, `Can't find ${req.originalUrl} on this server`)
 );
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+});
 module.exports = app;

@@ -21,10 +21,25 @@ exports.isLoggedIn = async (req, res, next) => {
       'UnAuthorized user! Login to gain access'
     );
   }
+
+  // Handle TokenExpiration Error
+
+  process.on('unhandledRejection', (err) => {
+    if (err.name === 'TokenExpiredError') {
+      return errResponseMsg(
+        res,
+        'fail',
+        401,
+        'Acess Token is Expired ! Login to gain access'
+      );
+    }
+  });
+
   /**
    * Token Verification
    */
   const decoded = await verifyJWT(token);
+
   /**
    *  Check to know if the user exist
    */
@@ -35,6 +50,7 @@ exports.isLoggedIn = async (req, res, next) => {
   if (statusCode >= 400) {
     return errResponseMsg(res, status, statusCode, message);
   }
+
   /**
    *  Check to know if user changed password after token was issued
    */
@@ -132,3 +148,5 @@ exports.updatePassword = async (req, res) => {
     return errResponseMsg(res, status, statusCode, message);
   }
 };
+
+exports.logOut = async (req, res) => {};

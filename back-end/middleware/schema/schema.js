@@ -2,7 +2,7 @@ const { body, param } = require('express-validator');
 
 module.exports = Object.freeze({
   userId: () => [param('userId').isUUID().withMessage('Invalid Id')],
-
+  tourId: () => [param('tourId').isUUID().withMessage('Invalid Id')],
   userSignUpCredentials: () => [
     body('firstName')
       .trim()
@@ -65,5 +65,42 @@ module.exports = Object.freeze({
       .not()
       .isEmpty()
       .withMessage('newPassword is a required field')
+  ],
+  tourCredentials: () => [
+    body('name').trim().not().isEmpty().withMessage('This is a required field'),
+    body('maxGroupSize')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field'),
+    body('difficulty')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field'),
+    body('price')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field'),
+    body('durations')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field'),
+    body('ratingsAverage').trim().optional(),
+    body('ratingsQuantity').trim().optional(),
+    body('priceDiscount').trim().optional(),
+    body('summary').trim().optional(),
+    body('description')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field'),
+    body('imageCover')
+      .trim()
+      .not()
+      .isEmpty()
+      .withMessage('This is a required field')
   ]
 });

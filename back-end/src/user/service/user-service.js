@@ -138,11 +138,11 @@ class userService {
       const perPage = parseInt(query.perPage, 10) || 10;
       const offset = (pageNo - 1) * perPage;
       const user = await userRepository.findAll(offset, perPage);
-      const totalUser = await userRepository.count();
+      const count = await userRepository.count();
       return serviceResponse('success', 200, 'Successfully fetched All Users', {
+        count,
         pageNo,
         perPage,
-        totalUser,
         user
       });
     } catch (err) {
@@ -152,7 +152,7 @@ class userService {
 
   static async delete(userId) {
     try {
-      const user = await userRepository.findByIdAndDelete(userId);
+      const user = await userRepository.deleteById(userId);
       if (!user) {
         return serviceResponse(
           'fail',
