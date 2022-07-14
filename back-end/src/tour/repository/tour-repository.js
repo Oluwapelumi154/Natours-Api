@@ -9,7 +9,8 @@ exports.create = async (data) => {
 
 exports.findById = async (tourId) => {
   const tour = await models.Tour.findOne({
-    where: { tourId }
+    where: { tourId },
+    include: ['startDates', 'Bookings']
   });
   return tour;
 };

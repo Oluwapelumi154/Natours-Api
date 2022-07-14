@@ -14,14 +14,13 @@ exports.findAll = async (offset, perPage) => {
     raw: true,
     paranoid: false
   });
-
   return user;
 };
 
 exports.findById = async (userId) => {
   const user = await models.User.findOne({
-    where: { userId }
-    // attributes: { exclude: ['password'] }
+    where: { userId },
+    include: 'Bookings'
   });
   return user;
 };

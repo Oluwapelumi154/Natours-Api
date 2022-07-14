@@ -60,19 +60,22 @@ module.exports = (sequelize, DataTypes) => {
       imageCover: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      startLocation: {
+        type: DataTypes.GEOMETRY('POINT')
       }
     },
     { timestamps: true, paranoid: true }
   );
   Tour.associate = (models) => {
-    Tour.hasMany(models.Images, {
-      foreignKey: 'tourId',
-      onDelete: 'CASCADE'
-    });
-    Tour.hasMany(models.Review, {
-      foreignKey: 'tourId',
-      onDelete: 'CASCADE'
-    });
+    // Tour.hasMany(models.Images, {
+    //   foreignKey: 'tourId',
+    //   onDelete: 'CASCADE'
+    // });
+    // Tour.hasMany(models.Review, {
+    //   foreignKey: 'tourId',
+    //   onDelete: 'CASCADE'
+    // });
     Tour.hasMany(models.startDate, {
       foreignKey: 'tourId',
       onDelete: 'CASCADE'
@@ -81,6 +84,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'tourId',
       onDelete: 'CASCADE'
     });
+    // Tour.hasMany(models.Guide, {
+    //   foreignKey: 'tourId',
+    //   onDelete: 'CASCADE'
+    // });
   };
   return Tour;
 };

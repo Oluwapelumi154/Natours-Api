@@ -1,6 +1,9 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: '../../.env' });
+
+dotenv.config({ path: '../.env' });
+
 const { DB_NAME, DB_PASSWORD, DB_USERNAME, DB_DIALECT, HOST } = process.env;
+
 const environment = {
   development: {
     database: DB_NAME,

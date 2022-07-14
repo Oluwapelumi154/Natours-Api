@@ -26,7 +26,7 @@ exports.getAllTours = async (req, res) => {
 };
 
 exports.getTour = async (req, res) => {
-  const { status, statusCode, message, data } = await tourService.find(
+  const { status, statusCode, message, data } = await tourService.findById(
     req.params.tourId
   );
   if (statusCode === 200) {

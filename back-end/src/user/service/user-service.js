@@ -98,6 +98,7 @@ class userService {
       }
       return serviceResponse('success', 200, 'Successfully fetched user', user);
     } catch (err) {
+      console.log(err);
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
   }
