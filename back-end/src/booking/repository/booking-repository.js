@@ -21,16 +21,14 @@ exports.findById = async (bookingId) => {
   return booking;
 };
 
-exports.delete = async (bookingId) => {
+exports.deleteById = async (bookingId) => {
   const booking = await models.Booking.destroy({
     where: { bookingId }
   });
   return booking;
 };
 
-exports.findByTour = async (tourId) => {
-  const booking = await models.Booking.findOne({
-    where: { tourId }
-  });
-  return booking;
+exports.count = async () => {
+  const totalBooking = await models.Booking.count();
+  return totalBooking;
 };

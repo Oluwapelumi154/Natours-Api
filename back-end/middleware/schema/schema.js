@@ -4,6 +4,9 @@ module.exports = Object.freeze({
   userId: () => [param('userId').isUUID().withMessage('Invalid Id')],
   tourId: () => [param('tourId').isUUID().withMessage('Invalid Id')],
   dateId: () => [param('dateId').isUUID().withMessage('Invalid Id')],
+  guideId: () => [param('guideId').isUUID().withMessage('Invalid Id')],
+  bookingId: () => [param('bookingId').isUUID().withMessage('Invalid Id')],
+
   tourStartDate: () => [
     body('date').trim().notEmpty().withMessage('This is a required field')
   ],
@@ -22,7 +25,10 @@ module.exports = Object.freeze({
       .withMessage('Invalid Email Address')
       .notEmpty()
       .withMessage('email is a required field'),
-    body('gender').trim().notEmpty().withMessage('gender is a required field'),
+    body('gender')
+      .trim()
+      .isIn(['male', 'female'])
+      .withMessage('gender is a required field'),
     body('password')
       .trim()
       .notEmpty()
@@ -58,10 +64,10 @@ module.exports = Object.freeze({
       .withMessage('newPassword is a required field')
   ],
   tourCredentials: () => [
-    body('name').trim().not().isEmpty().withMessage('This is a required field'),
+    body('name').trim().notEmpty().withMessage('This is a required field'),
     body('maxGroupSize')
       .trim()
-      .isEmpty()
+      .notEmpty()
       .withMessage('This is a required field'),
     body('difficulty')
       .trim()
@@ -75,8 +81,36 @@ module.exports = Object.freeze({
     body('summary').trim().optional(),
     body('description')
       .trim()
-      .isEmpty()
+      .notEmpty()
       .withMessage('This is a required field'),
     body('imageCover').trim().notEmpty().withMessage('This is a required field')
+  ],
+
+  guideData: () => [
+    body('role')
+      .trim()
+      .isIn(['lead-guide', 'tour-guide'])
+      .notEmpty()
+      .withMessage('role is a required field'),
+    body('email')
+      .isEmail()
+      .withMessage('invalid email')
+      .notEmpty()
+      .withMessage('email is a required field'),
+    body('phoneNumber')
+      .trim()
+      .isMobilePhone()
+      .withMessage('Enter a valid mobileNo')
+      .notEmpty()
+      .withMessage('mobileNo is a required field'),
+    body('gender')
+      .trim()
+      .isIn(['male', 'female'])
+      .notEmpty()
+      .withMessage('gender is a required field')
+  ],
+
+  guideDataToUpdate: () => [
+    body('role').trim().isIn(['lead-guide', 'tour-guide']).optional()
   ]
 });

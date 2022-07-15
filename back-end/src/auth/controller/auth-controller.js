@@ -46,7 +46,6 @@ exports.isLoggedIn = async (req, res, next) => {
   const { status, statusCode, message, data } = await userService.findById(
     decoded.id
   );
-
   if (statusCode >= 400) {
     return errResponseMsg(res, status, statusCode, message);
   }

@@ -20,7 +20,6 @@ const {
 const { updateUser } = require('../controller/user-controller');
 
 router.post('/signup', validate(userSignUpCredentials()), createUser);
-
 router.get('/all', isLoggedIn, getUsers);
 
 router.get('/:userId', validate(userId()), getUser);

@@ -1,8 +1,7 @@
 const path = require('path');
-console.log(path.resolve(`${__dirname}`, './config/environment.js'));
 module.exports = {
-  config: path.resolve(`${__dirname}`, './config/environment.js'),
-  'migrations-path': path.resolve(`${__dirname}`, `./src/user/migrations`),
-  'models-path': path.resolve(`${__dirname}`, `./src/user/model/user`),
-  'seeders-path': path.resolve(`${__dirname}`, `./src/seeders`)
+  config: path.resolve(`${__dirname}`, `./config/environment.js`),
+  'migrations-path': path.resolve(`${__dirname}`, `./migrations`),
+  // 'models-path': path.resolve(`${__dirname}`, `./src/user/model/`),
+  'seeders-path': path.resolve(`${__dirname}`, `./seeders`)
 };

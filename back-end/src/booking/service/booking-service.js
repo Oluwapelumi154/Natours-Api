@@ -1,25 +1,52 @@
-const { randomUUID: uuidv4 } = require('crypto');
 const { serviceResponse } = require('../../../utils');
-const { tourRepository } = require('../../tour/repository');
-const { userRepository } = require('../../user/repository');
 const { bookingRepository } = require('../repository');
 
 class bookingService {
-  static async create(userId, tourId) {
+  static async findAllBooking(query) {
+    const pageNo = query.pageNo || 1;
+    const perPage = query.perPage || 10;
+    const offset = (pageNo - 1) * perPage;
+    const count = await bookingRepository.count();
     try {
-      const user = await userRepository.findById(userId);
-      const tour = await tourRepository.findById(tourId);
-      if (!tour) {
-        return serviceResponse('fail', 400, 'Invalid tour Id');
+      const booking = await bookingRepository.find(offset, perPage);
+
+      return serviceResponse(
+        'success',
+        200,
+        'Successfully fetched all Bookings',
+        {
+          count,
+          pageNo,
+          perPage,
+          booking
+        }
+      );
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
+
+  static async findBooking(bookingId) {
+    try {
+      const booking = await bookingRepository.findById(bookingId);
+      if (!booking) {
+        return serviceResponse('fail', 400, 'Invalid bookingId');
       }
-      const bookingId = uuidv4();
-      const bookingObj = {
-        bookingId,
-        tourId: tour.dataValues.id,
-        userId: user.dataValues.id
-      };
-      const booking = await bookingRepository.create(bookingObj);
-      return serviceResponse('success', 200, 'Successfully Booked a Tour', {
+      return serviceResponse('success', 200, 'Successfully fetched Booking', {
+        booking
+      });
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
+
+  static async deleteBooking(bookingId) {
+    try {
+      const booking = await bookingRepository.deleteById(bookingId);
+      if (!booking) {
+        return serviceResponse('fail', 400, 'Invalid bookingId');
+      }
+      return serviceResponse('success', 200, 'Successfully fetched Booking', {
         booking
       });
     } catch (err) {

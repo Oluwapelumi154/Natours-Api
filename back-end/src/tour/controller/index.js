@@ -3,7 +3,9 @@ const {
   deleteTour,
   getAllTours,
   getTour,
-  updateTour
+  updateTour,
+  addTourGuide,
+  bookTour
 } = require('./tour-controller');
 
 module.exports = Object.freeze({
@@ -11,5 +13,7 @@ module.exports = Object.freeze({
   deleteTour,
   getAllTours,
   getTour,
-  updateTour
+  updateTour,
+  addTourGuide,
+  bookTour
 });

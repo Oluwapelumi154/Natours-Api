@@ -5,23 +5,26 @@ exports.serviceResponse = (status, statusCode, message, data) => ({
   data
 });
 
-exports.successResponseMsg = (res, status, statusCode, message, data) =>
-  res.status(statusCode).json({
+exports.successResponseMsg = (res, status, statusCode, message, data) => {
+  return res.status(statusCode).json({
     status,
     message,
     data
   });
+};
 
-exports.errResponseMsg = (res, status, statusCode, message) =>
-  res.status(statusCode).json({
+exports.errResponseMsg = (res, status, statusCode, message) => {
+  return res.status(statusCode).json({
     status,
     message
   });
+};
 
-exports.authResponseMsg = (res, status, statusCode, message, data) =>
-  res.status(statusCode).json({
+exports.authResponseMsg = (res, status, statusCode, message, data) => {
+  return res.status(statusCode).json({
     status,
     message,
     isAuthenticated: true,
     data
   });
+};

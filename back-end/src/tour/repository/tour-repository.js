@@ -10,13 +10,13 @@ exports.create = async (data) => {
 exports.findById = async (tourId) => {
   const tour = await models.Tour.findOne({
     where: { tourId },
-    include: ['startDates', 'Bookings']
+    include: ['Bookings', 'Guides', 'Reviews', 'startDates']
   });
   return tour;
 };
 
 exports.find = async (offset, perPage) => {
-  const tour = await models.Tour.findAll({ offset, perPage, paranoid: false });
+  const tour = await models.Tour.findAll({ offset, perPage });
   return tour;
 };
 

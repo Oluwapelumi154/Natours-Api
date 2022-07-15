@@ -28,9 +28,6 @@ class userService {
       const password = await hash(body.password);
       body.password = password;
       const fields = Object.keys(body);
-      if (fields.includes('role')) {
-        delete body.role;
-      }
       if (fields.includes('userId')) {
         delete body.userId;
       }
@@ -94,7 +91,7 @@ class userService {
     try {
       const user = await userRepository.findById(userId);
       if (!user) {
-        return serviceResponse('fail', 400, 'Invalid Id');
+        return serviceResponse('fail', 400, 'Invalid userId');
       }
       return serviceResponse('success', 200, 'Successfully fetched user', user);
     } catch (err) {

@@ -1,5 +1,7 @@
 const { randomUUID: uuidv4 } = require('crypto');
 const { serviceResponse } = require('../../../utils');
+const { bookingRepository } = require('../../booking/repository');
+const { guideRepository } = require('../../guide/repository');
 const { tourRepository } = require('../repository');
 
 class tourService {
@@ -56,7 +58,7 @@ class tourService {
     try {
       const tour = await tourRepository.findById(tourId);
       if (!tour) {
-        return serviceResponse('fail', 400, 'Invalid Id');
+        return serviceResponse('fail', 400, 'Invalid tour Id');
       }
       return serviceResponse('success', 200, 'Successfully fetched tour', tour);
     } catch (err) {
@@ -80,7 +82,7 @@ class tourService {
     try {
       const tour = await tourRepository.findById(tourId);
       if (!tour) {
-        return serviceResponse('fail', 400, 'Invalid Id');
+        return serviceResponse('fail', 400, 'Invalid tourId');
       }
       tour.update({
         name: body.name,
@@ -103,6 +105,59 @@ class tourService {
     try {
       const tour = await tourRepository.stats();
       return serviceResponse('success', 200, 'Successfully Statistics', tour);
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
+
+  static async addGuide(tourId, body) {
+    try {
+      const tour = await tourRepository.findById(tourId);
+      if (!tour) {
+        return serviceResponse('fail', 400, 'Invalid tourId');
+      }
+      const guideId = uuidv4();
+
+      const guideData = {
+        guideId,
+        ...body
+      };
+      const guide = await guideRepository.create(guideData);
+      guide.update({
+        tourId: tour.dataValues.id
+      });
+      return serviceResponse(
+        'success',
+        201,
+        'Successfully added guide to a tour',
+        guide
+      );
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
+
+  static async bookTour(tourId, userId) {
+    try {
+      const tour = await tourRepository.findById(tourId);
+      if (!tour) {
+        return serviceResponse('fail', 400, 'Invalid tourId');
+      }
+      const bookingId = uuidv4();
+      const bookingData = {
+        bookingId,
+        userId
+      };
+      const booking = await bookingRepository.create(bookingData);
+      booking.update({
+        tourId: tour.dataValues.id
+      });
+      return serviceResponse(
+        'success',
+        201,
+        'Successfully booked a tour',
+        booking
+      );
     } catch (err) {
       return serviceResponse('fail', 500, 'Internal Server Error');
     }

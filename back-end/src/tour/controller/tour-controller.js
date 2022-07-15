@@ -72,3 +72,32 @@ exports.getTourStats = async (req, res) => {
     return errResponseMsg(res, status, statusCode, message);
   }
 };
+
+exports.addTourGuide = async (req, res) => {
+  const { params, body } = req;
+  const { status, statusCode, message, data } = await tourService.addGuide(
+    params.tourId,
+    body
+  );
+
+  if (statusCode === 201) {
+    return successResponseMsg(res, status, statusCode, message, data);
+  }
+  if (statusCode >= 400) {
+    return errResponseMsg(res, status, statusCode, message);
+  }
+};
+
+exports.bookTour = async (req, res) => {
+  const { params, user } = req;
+  const { status, statusCode, message, data } = await tourService.bookTour(
+    params.tourId,
+    user.id
+  );
+  if (statusCode === 201) {
+    return successResponseMsg(res, status, statusCode, message, data);
+  }
+  if (statusCode >= 400) {
+    return errResponseMsg(res, status, statusCode, message);
+  }
+};

@@ -17,14 +17,7 @@ const sequelize = new Sequelize(
   config
 );
 let subDirs = [];
-const dirToExclude = [
-  'migration',
-  'transaction',
-  'admin',
-  'seeders',
-  'config',
-  'auth'
-];
+const dirToExclude = ['migration', 'transaction', 'admin', 'seeders', 'auth'];
 fs.readdirSync(rootDir).forEach((dir) => {
   const isDir = fs.statSync(path.join(`${rootDir}/${dir}`)).isDirectory();
   if (isDir) {
@@ -56,7 +49,6 @@ files
     );
     db[model.name] = model;
   });
-
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

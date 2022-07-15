@@ -11,5 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   });
+  review.associate = (models) => {
+    review.belongsTo(models.User, {
+      foreignKey: 'userId'
+    });
+  };
   return review;
 };
