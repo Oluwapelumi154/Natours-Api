@@ -104,7 +104,13 @@ class tourService {
   static async tourStat() {
     try {
       const tour = await tourRepository.stats();
-      return serviceResponse('success', 200, 'Successfully Statistics', tour);
+
+      return serviceResponse(
+        'success',
+        200,
+        'Successfully fetched tour Statistics',
+        tour
+      );
     } catch (err) {
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
@@ -162,5 +168,29 @@ class tourService {
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
   }
+
+  static async addTourImage(tourId) {
+    try {
+      const tour = await tourRepository.findById(tourId);
+      if (!tour) {
+        return serviceResponse('fail', 400, 'Invalid tourId');
+      }
+      const tourImgId = uuidv4();
+      const imageData = {};
+      const booking = await bookingRepository.create(bookingData);
+      booking.update({
+        tourId: tour.dataValues.id
+      });
+      return serviceResponse(
+        'success',
+        201,
+        'Successfully booked a tour',
+        booking
+      );
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
 }
+
 module.exports = tourService;

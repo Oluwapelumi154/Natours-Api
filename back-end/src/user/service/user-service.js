@@ -2,16 +2,11 @@ const crypto = require('crypto');
 
 const { randomUUID: uuidv4 } = crypto;
 
-const {
-  serviceResponse,
-  signJWT,
-  passwordResetToken,
-  hashToken
-} = require('../../../utils');
+const { serviceResponse, signJWT } = require('../../../utils');
 
 const { userRepository } = require('../repository');
 
-const { hash, compare } = require('../../../utils');
+const { hash } = require('../../../utils');
 
 class userService {
   static async create(body) {
@@ -50,37 +45,9 @@ class userService {
 
       const token = signJWT(user.userId, user.email);
       const newUser = await userRepository.create(user);
-      return serviceResponse('success', 201, 'Successfully Registered', {
+      return serviceResponse('success', 201, 'Successfully Registered User', {
         token,
         newUser
-      });
-    } catch (err) {
-      return serviceResponse('fail', 500, 'Internal Server Error');
-    }
-  }
-
-  static async authenticate(body) {
-    try {
-      const user = await userRepository.findByEmail(body.email);
-      let isValidPassword;
-      let userObj;
-      if (user) {
-        const { userId, email, password } = user.dataValues;
-        isValidPassword = await compare(body.password, password);
-        userObj = {
-          userId,
-          email
-        };
-      }
-      if (!user) {
-        return serviceResponse('fail', 401, 'Incorrect Email Or Password');
-      }
-      if (!isValidPassword) {
-        return serviceResponse('fail', 401, 'Incorrect Email Or Password');
-      }
-      const token = signJWT(userObj.userId, userObj.email);
-      return serviceResponse('success', 200, 'Successfully Authenticated', {
-        token
       });
     } catch (err) {
       return serviceResponse('fail', 500, 'Internal Server Error');
@@ -95,7 +62,6 @@ class userService {
       }
       return serviceResponse('success', 200, 'Successfully fetched user', user);
     } catch (err) {
-      console.log(err);
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
   }
@@ -170,85 +136,6 @@ class userService {
       return jwtTimeStamp < changedTimeStamp;
     }
     return false;
-  }
-
-  static async forgotPassword(body) {
-    try {
-      const user = await userRepository.findByEmail(body.email);
-      const { resetToken, hashedToken } = passwordResetToken();
-      if (!user) {
-        return serviceResponse('fail', 400, 'No user with this email');
-      }
-      user.update({
-        resetToken: hashedToken,
-        resetTokenExp: Date.now() + 10 * 60 * 1000
-      });
-      return serviceResponse('success', 200, '', { user, resetToken });
-    } catch (err) {
-      return serviceResponse('fail', 500, 'Internal Server Error');
-    }
-  }
-
-  static async findByToken(resetToken, body) {
-    try {
-      const hashedResetToken = hashToken(resetToken);
-      const user = await userRepository.findByToken(hashedResetToken);
-      let userObj;
-      if (user) {
-        const { dataValues } = user;
-        userObj = {
-          userId: dataValues.userId,
-          email: dataValues.email
-        };
-      }
-      if (!user) {
-        return serviceResponse(
-          'fail',
-          400,
-          'Reset Token is Invalid or Expired'
-        );
-      }
-      body.password = await hash(body.password);
-      user.update({
-        password: body.password,
-        passwordChangedAt: Date.now() - 1000,
-        resetToken: null,
-        resetTokenExp: null
-      });
-      const token = signJWT(userObj.userId, userObj.email);
-      return serviceResponse(
-        'success',
-        200,
-        'You have Sucessfully reset your password',
-        { token }
-      );
-    } catch (err) {
-      return serviceResponse('fail', 500, 'Internal Server Error');
-    }
-  }
-
-  static async updateUserPassword(userId, body) {
-    try {
-      const user = await userRepository.findById(userId);
-      if (!user) {
-        return serviceResponse('fail', 400, 'Invalid Id');
-      }
-      let isValidPassword;
-      if (user) {
-        const { password } = user.dataValues;
-        isValidPassword = await compare(body.password, password);
-      }
-      if (!isValidPassword) {
-        return serviceResponse('fail', 400, 'Incorrect Password');
-      }
-      body.newPassword = await hash(body.newPassword);
-      user.update({
-        password: body.newPassword
-      });
-      return serviceResponse('success', 200, 'Successfully Updated Password');
-    } catch (err) {
-      return serviceResponse('fail', 500, 'Internal Server Error');
-    }
   }
 
   static async updateUserProfile(userId, body) {

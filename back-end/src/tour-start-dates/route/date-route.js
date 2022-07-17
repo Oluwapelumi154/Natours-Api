@@ -1,13 +1,14 @@
 const router = require('express').Router();
 const { tourStartDate, dateId } = require('../../../middleware/schema/schema');
 const { validate } = require('../../../middleware/schema/validate');
-const { addTourDate } = require('../controller');
+const { addTourDate, getAllTourDate } = require('../controller');
 const {
   deleteTourDate,
   updateTourDate,
   getTourDate
 } = require('../controller/date-controller');
 
+router.get('/all/:year/', getAllTourDate);
 router.post('/:tourId', validate(tourStartDate()), addTourDate);
 router.delete('/:dateId', validate(dateId()), deleteTourDate);
 router.patch('/:dateId', validate(dateId()), updateTourDate);

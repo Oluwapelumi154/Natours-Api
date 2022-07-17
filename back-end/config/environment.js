@@ -4,9 +4,9 @@ dotenv.config({ path: '../.env' });
 
 const environment = {
   development: {
-    database: process.env.DB_NAME,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME || 'natours',
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'Oluwapelumi2002',
     dialect: process.env.DB_DIALECT || 'mysql',
     host: process.env.HOST
   },

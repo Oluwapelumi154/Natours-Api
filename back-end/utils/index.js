@@ -4,7 +4,7 @@ const {
   authResponseMsg,
   errResponseMsg
 } = require('./response');
-const { hash, compare } = require('./hash');
+const { hash, comparePassword } = require('./hash');
 const {
   signJWT,
   verifyJWT,
@@ -16,7 +16,7 @@ const sendEmail = require('./send-mail');
 
 module.exports = Object.freeze({
   authResponseMsg,
-  compare,
+  comparePassword,
   errResponseMsg,
   hashToken,
   setCookie,

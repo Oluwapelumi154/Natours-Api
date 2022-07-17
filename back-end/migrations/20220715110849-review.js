@@ -15,14 +15,28 @@ module.exports = {
         },
         { transaction }
       );
-      await queryInterface.addColumn('Reviews', 'tourId', {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Reviews',
-          key: 'id'
-        }
-      });
+      await queryInterface.addColumn(
+        'Reviews',
+        'tourId',
+        {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Reviews',
+            key: 'id'
+          }
+        },
+        { transaction }
+      );
+      await queryInterface.addColumn(
+        'Reviews',
+        'rating',
+        {
+          type: Sequelize.INTEGER,
+          allowNull: true
+        },
+        { transaction }
+      );
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

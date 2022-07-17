@@ -71,6 +71,7 @@ module.exports = Object.freeze({
       .withMessage('This is a required field'),
     body('difficulty')
       .trim()
+      .isIn(['easy', 'medium', 'difficult'])
       .notEmpty()
       .withMessage('This is a required field'),
     body('price').trim().notEmpty().withMessage('This is a required field'),

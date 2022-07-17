@@ -15,3 +15,5 @@ exports.createReview = async (req, res) => {
     return errResponseMsg(res, status, statusCode, message);
   }
 };
+
+exports.calcTourRatings = async (req, res) => {};

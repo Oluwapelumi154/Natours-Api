@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.GEOMETRY('POINT')
       }
     },
-    { timestamps: true, paranoid: true }
+    { paranoid: true }
   );
   Tour.associate = (models) => {
     Tour.hasMany(models.startDate, {

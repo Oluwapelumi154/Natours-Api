@@ -58,3 +58,16 @@ exports.getTourDate = async (req, res) => {
     return errResponseMsg(res, status, statusCode, message);
   }
 };
+
+exports.getAllTourDate = async (req, res) => {
+  const { status, statusCode, message, data } = await dateService.findAllDate(
+    req.params.year
+  );
+
+  if (statusCode === 200) {
+    return successResponseMsg(res, status, statusCode, message, data);
+  }
+  if (statusCode >= 400) {
+    return errResponseMsg(res, status, statusCode, message);
+  }
+};

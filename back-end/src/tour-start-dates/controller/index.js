@@ -1,5 +1,6 @@
-const { addTourDate } = require('./date-controller');
+const { addTourDate, getAllTourDate } = require('./date-controller');
 
 module.exports = Object.freeze({
-  addTourDate
+  addTourDate,
+  getAllTourDate
 });

@@ -7,8 +7,16 @@ class reviewService {
   static async create(tourId, userId, body) {
     try {
       const tour = await tourRepository.findById(tourId);
+
       if (!tour) {
         return serviceResponse('fail', 400, 'Invalid tourId');
+      }
+      const userReviewExist = await reviewRepository.findUser(
+        userId,
+        tour.dataValues.id
+      );
+      if (userReviewExist) {
+        return serviceResponse('fail', 400, 'You have reviewed this tour');
       }
       const reviewId = uuidv4();
       const reviewDataObj = {
@@ -20,6 +28,7 @@ class reviewService {
         tourId: tour.dataValues.id,
         userId
       });
+
       return serviceResponse(
         'success',
         201,
@@ -27,7 +36,6 @@ class reviewService {
         { review }
       );
     } catch (err) {
-      console.log(err);
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
   }

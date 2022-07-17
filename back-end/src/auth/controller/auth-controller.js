@@ -1,79 +1,31 @@
 /* eslint-disable prettier/prettier */
 
-const { userService } = require('../../user/service');
+const { authService } = require('../service');
 
 const {
   authResponseMsg,
   errResponseMsg,
   sendEmail,
-  setCookie,
-  successResponseMsg,
-  verifyJWT
+  successResponseMsg
 } = require('../../../utils');
 
 exports.isLoggedIn = async (req, res, next) => {
-  const token = req.headers['x-auth-token'];
-  if (!token) {
-    return errResponseMsg(
-      res,
-      'fail',
-      401,
-      'UnAuthorized user! Login to gain access'
-    );
+  const { status, statusCode, message, data } =
+    await authService.isAuthenticated(req.headers);
+  if (statusCode === 200) {
+    req.user = data.dataValues;
+    return next();
   }
-
-  // Handle TokenExpiration Error
-
-  process.on('unhandledRejection', (err) => {
-    if (err.name === 'TokenExpiredError') {
-      return errResponseMsg(
-        res,
-        'fail',
-        401,
-        'Acess Token is Expired ! Login to gain access'
-      );
-    }
-  });
-
-  /**
-   * Token Verification
-   */
-  const decoded = await verifyJWT(token);
-
-  /**
-   *  Check to know if the user exist
-   */
-  const { status, statusCode, message, data } = await userService.findById(
-    decoded.id
-  );
   if (statusCode >= 400) {
     return errResponseMsg(res, status, statusCode, message);
   }
-
-  /**
-   *  Check to know if user changed password after token was issued
-   */
-  const { passwordChangedAt } = data.dataValues;
-
-  const user = userService.changedPasswordAfter(decoded.iat, passwordChangedAt);
-  if (user) {
-    return errResponseMsg(
-      res,
-      'fail',
-      401,
-      'user recently changed password! Login to gain access'
-    );
-  }
-  req.user = data.dataValues;
-  next();
 };
 
 exports.login = async (req, res) => {
-  const { status, statusCode, message, data } = await userService.authenticate(
+  const { status, statusCode, message, data } = await authService.authenticate(
     req.body
   );
   if (statusCode === 200) {
-    setCookie(res, data.token);
     return authResponseMsg(res, status, statusCode, message, data);
   }
   if (statusCode >= 400) {
@@ -82,47 +34,52 @@ exports.login = async (req, res) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
+  const { body } = req;
   const { status, statusCode, message, data } =
-    await userService.forgotPassword(req.body);
+    await authService.forgotPassword(body.email);
+  if (statusCode === 200) {
+    // req.user = data;
+    // return next();
+    return successResponseMsg(res, status, statusCode, message, data);
+  }
   if (statusCode >= 400) {
-    return errResponseMsg(res, status, statusCode, message);
+    return errResponseMsg(res, status, message);
   }
-  req.user = data;
+};
 
-  next();
-};
-exports.sendMail = async (req, res) => {
-  const { resetToken, user } = req.user;
-  const resetUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/api/auth/resetPassword/${resetToken}`;
-  try {
-    await sendEmail({
-      email: user.dataValues.email,
-      subject: 'The resetToken is only valid for 10minutes',
-      message: resetUrl
-    });
-    return successResponseMsg(
-      res,
-      'success',
-      200,
-      'reset Token has been sent to the email'
-    );
-  } catch (err) {
-    user.resetToken = null;
-    user.resetTokenExp = null;
-    user.save();
-    return successResponseMsg(
-      res,
-      'fail',
-      500,
-      'There was an error sending the email ! Try again later'
-    );
-  }
-};
+// exports.sendMail = async (req, res) => {
+//   const { resetToken, user } = req.user;
+//   const resetUrl = `${req.protocol}://${req.get(
+//     'host'
+//   )}/api/auth/resetPassword/${resetToken}`;
+//   try {
+//     await sendEmail({
+//       email: user.dataValues.email,
+//       subject: 'The resetToken is only valid for 10minutes',
+//       message: resetUrl
+//     });
+//     return successResponseMsg(
+//       res,
+//       'success',
+//       200,
+//       'reset Token has been sent to the email'
+//     );
+//   } catch (err) {
+//     user.resetToken = null;
+//     user.resetTokenExp = null;
+//     user.save();
+//     return successResponseMsg(
+//       res,
+//       'fail',
+//       500,
+//       'There was an error sending the email ! Try again later'
+//     );
+//   }
+// };
+
 exports.resetPassword = async (req, res) => {
   const { params, body } = req;
-  const { status, statusCode, message, data } = await userService.findByToken(
+  const { status, statusCode, message, data } = await authService.resetPassword(
     params.token,
     body
   );
@@ -136,7 +93,7 @@ exports.resetPassword = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const { body, user } = req;
-  const { status, statusCode, message } = await userService.updateUserPassword(
+  const { status, statusCode, message } = await authService.updateUserPassword(
     user.userId,
     body
   );
@@ -147,5 +104,3 @@ exports.updatePassword = async (req, res) => {
     return errResponseMsg(res, status, statusCode, message);
   }
 };
-
-exports.logOut = async (req, res) => {};

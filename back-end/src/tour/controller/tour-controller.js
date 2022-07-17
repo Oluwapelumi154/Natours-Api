@@ -63,7 +63,9 @@ exports.deleteTour = async (req, res) => {
 };
 
 exports.getTourStats = async (req, res) => {
-  const { status, statusCode, message, data } = await tourService.tourStat();
+  const { status, statusCode, message, data } = await tourService.tourStat(
+    req.params.tourId
+  );
 
   if (statusCode === 200) {
     return successResponseMsg(res, status, statusCode, message, data);
@@ -95,6 +97,17 @@ exports.bookTour = async (req, res) => {
     user.id
   );
   if (statusCode === 201) {
+    return successResponseMsg(res, status, statusCode, message, data);
+  }
+  if (statusCode >= 400) {
+    return errResponseMsg(res, status, statusCode, message);
+  }
+};
+
+exports.getMonthlyPlan = async (req, res) => {
+  const { status, statusCode, message, data } =
+    await tourService.getTourDates();
+  if (statusCode === 200) {
     return successResponseMsg(res, status, statusCode, message, data);
   }
   if (statusCode >= 400) {

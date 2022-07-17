@@ -12,7 +12,7 @@ const {
 } = require('../controller/auth-controller');
 
 router.post('/login', validate(userLoginCredentails()), login);
-router.post('/forgotPassword', forgotPassword, sendMail);
+router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
 router.patch(
   '/updatePassword',

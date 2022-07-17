@@ -66,6 +66,20 @@ class dateService {
       return serviceResponse('fail', 500, 'Internal Server Error');
     }
   }
+
+  static async findAllDate(year) {
+    try {
+      const tour = await dateRepository.find(year);
+      return serviceResponse(
+        'success',
+        200,
+        'Successfully fetched All tour date',
+        tour
+      );
+    } catch (err) {
+      return serviceResponse('fail', 500, 'Internal Server Error');
+    }
+  }
 }
 
 module.exports = dateService;

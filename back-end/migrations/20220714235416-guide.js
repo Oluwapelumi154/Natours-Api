@@ -37,14 +37,14 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    // await queryInterface.dropTable('Guides');
-    const transaction = await queryInterface.sequelize.transaction();
-    try {
-      await queryInterface.removeColumn('Guides', 'imgUrl');
-      await queryInterface.removeColumn('Guides', 'tourId');
-      await transaction.commit();
-    } catch (err) {
-      await transaction.rollback();
-    }
+    await queryInterface.dropTable('Guides');
+    // const transaction = await queryInterface.sequelize.transaction();
+    // try {
+    //   await queryInterface.removeColumn('Guides', 'imgUrl');
+    //   await queryInterface.removeColumn('Guides', 'tourId');
+    //   await transaction.commit();
+    // } catch (err) {
+    //   await transaction.rollback();
+    // }
   }
 };

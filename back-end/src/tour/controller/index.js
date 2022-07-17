@@ -5,7 +5,9 @@ const {
   getTour,
   updateTour,
   addTourGuide,
-  bookTour
+  bookTour,
+  getTourStats,
+  getMonthlyPlan
 } = require('./tour-controller');
 
 module.exports = Object.freeze({
@@ -15,5 +17,7 @@ module.exports = Object.freeze({
   getTour,
   updateTour,
   addTourGuide,
-  bookTour
+  bookTour,
+  getTourStats,
+  getMonthlyPlan
 });

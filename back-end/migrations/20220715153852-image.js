@@ -15,6 +15,19 @@ module.exports = {
         },
         { transaction }
       );
+      await queryInterface.addColumn(
+        'Images',
+        'imageId',
+        {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Tours',
+            key: 'id'
+          }
+        },
+        { transaction }
+      );
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

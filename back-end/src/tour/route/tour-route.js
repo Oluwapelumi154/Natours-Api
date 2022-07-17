@@ -13,7 +13,9 @@ const {
   updateTour,
   deleteTour,
   addTourGuide,
-  bookTour
+  bookTour,
+  getTourStats,
+  getMonthlyPlan
 } = require('../controller');
 
 const { validate } = require('../../../middleware/schema/validate');
@@ -21,6 +23,8 @@ const { isLoggedIn } = require('../../auth/controller');
 const { createReview } = require('../../review/controller');
 
 router.post('/', validate(tourCredentials()), createTour);
+router.get('/plan', getMonthlyPlan);
+router.get('/stats', getTourStats);
 router.get('/all', getAllTours);
 router.get('/:tourId', getTour);
 router.patch('/:tourId', updateTour);

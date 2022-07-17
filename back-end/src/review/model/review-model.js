@@ -6,13 +6,20 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    comment: {
+    review: {
       type: DataTypes.STRING,
+      allowNull: true
+    },
+    rating: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   });
   review.associate = (models) => {
     review.belongsTo(models.User, {
+      foreignKey: 'userId'
+    });
+    review.belongsTo(models.Tour, {
       foreignKey: 'userId'
     });
   };
