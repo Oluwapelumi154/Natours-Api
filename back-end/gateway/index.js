@@ -1,15 +1,11 @@
 const router = require('express').Router();
-const { userRoute } = require('../src/user/route');
-const { authRoute } = require('../src/auth/route');
-const { tourRoute } = require('../src/tour/route');
-const { bookingRoute } = require('../src/booking/route');
-const { dateRoute } = require('../src/tour-start-dates/route');
-const { guideRoute } = require('../src/guide/route');
+const { userRoute } = require('../src/components/user/route');
+const { authRoute } = require('../src/components/auth/route');
+const { tourRoute } = require('../src/components/tour/route');
+const { bookingRoute } = require('../src/components/booking/route');
 
 router.use('/user', userRoute);
 router.use('/auth', authRoute);
 router.use('/tour', tourRoute);
-router.use('/book', bookingRoute);
-router.use('/date', dateRoute);
-router.use('/guide', guideRoute);
+router.use('/booking', bookingRoute);
 module.exports = router;

@@ -1,14 +1,17 @@
 const dotenv = require('dotenv');
 
 dotenv.config();
+
 const http = require('http');
-const { db } = require('./config');
+
+const { db } = require('./src/config');
 
 const app = require('./src/app');
 
 /**
  *  Normalize a port into a number,string  or false;
  */
+
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
   if (isNaN(port)) {

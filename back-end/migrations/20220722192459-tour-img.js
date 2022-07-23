@@ -3,20 +3,30 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addColumn(
-        'Users',
-        'imgUrl',
+        'Images',
+        'tourId',
         {
-          type: Sequelize.STRING,
-          allowNull: true
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Tour'
+          }
         },
         { transaction }
       );
-
+      await queryInterface.addColumn(
+        'Images',
+        'imgId',
+        {
+          type: Sequelize.STRING,
+          allowNull: false
+        },
+        { transaction }
+      );
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
     }
-
     /**
      * Add altering commands here.
      *
@@ -26,16 +36,7 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Users');
-
-    // const transaction = await queryInterface.sequelize.transaction();
-    // try {
-    //   await queryInterface.removeColumn('Users', 'data', { transaction });
-    //   await queryInterface.removeColumn('Users', 'height', { transaction });
-    //   await transaction.commit();
-    // } catch (err) {
-    //   await transaction.rollback();
-    // }
+    await queryInterface.dropTable('Images');
     /**
      * Add reverting commands here.
      *
