@@ -1,0 +1,490 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Natours Api
+  contact:
+    email: orebayopelumi@gmail.com
+  termsOfService: "https:/swagger.io"
+  description: This an Api documentation for natours Company to know more about us ['https://natours.io']('https://natours.io')
+servers:
+  - description: staging
+    url: "http://127.0.0.1:8000/api"
+tags:
+  - name: Auth
+  - name: User
+  - name: Tour
+  - name: Booking
+  - name: Transaction
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Authenticate a user
+      description: user login credentials
+      requestBody:
+        description: user login credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: authenticated user data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/200"
+        401:
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/401"
+        500:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/500"
+  /auth/forgotPassword:
+    post:
+      tags:
+        - Auth
+      summary: Send email for password reset
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/400"
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/500"
+        401:
+          content:
+            application/json:
+              schema:
+
+  /auth/resetPassword:
+    patch:
+      tags:
+        - Auth
+      summary: Reset a user password
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/200"
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/400"
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/500"
+
+  /auth/verify:
+    patch:
+      tags:
+        - Auth
+      summary: Verify a user
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+
+  /user/signup:
+    post:
+      tags:
+        - User
+      summary: Create a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phoneNumber:
+                  type: string
+                gender:
+                  type: string
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/201"
+
+  /user/all:
+    get:
+      tags:
+        - User
+      summary: Retreives all user
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  user:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/user"
+
+  /user/{userId}:
+    get:
+      tags:
+        - User
+      summary: Retreives a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+    patch:
+      tags:
+        - User
+      summary: Update a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+
+    delete:
+      tags:
+        - User
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+  /tour:
+    get:
+      tags:
+        - Tour
+      summary: Retrieves all tour
+  /tour/{tourId}:
+    get:
+      tags:
+        - Tour
+      summary: Retrieves a tour
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+    patch:
+      tags:
+        - Tour
+      summary: Update a Tour
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+    delete:
+      tags:
+        - Tour
+      summary: Delete a Tour
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+  /tour/{tourId}/guide:
+    post:
+      tags:
+        - Tour
+      summary: Add a Tour guide
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+    get:
+      tags:
+        - Tour
+      summary: Delete a Tour guide
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+    patch:
+      tags:
+        - Tour
+      summary: Update a Tour guide
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+    delete:
+      tags:
+        - Tour
+      summary: Delete a Tour guide
+      parameters:
+        - in: path
+          name: tourId
+          required: true
+          schema:
+            type: string
+  /tour/{tourId}/review:
+    post:
+      tags:
+        - Tour
+      summary: Review a tour
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                review:
+                  type: string
+                rating:
+                  type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      review:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          reviewId:
+                            type: string
+                          userId:
+                            type: string
+                          tourId:
+                            type: string
+
+  /tour/stats:
+    get:
+      tags:
+        - Tour
+      summary: Retrieves tour statistics
+  /booking:
+    get:
+      tags:
+        - Booking
+      summary: Retrieves all Booking
+  /booking/{bookingId}:
+    get:
+      tags:
+        - Booking
+      summary: Retrieves a Booking
+      parameters:
+        - in: path
+          name: bookingId
+          required: true
+          schema:
+            type: string
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            password:
+              type: string
+            imgUrl:
+              type: string
+            gender:
+              type: string
+            status:
+              type: string
+            passwordChangedAt:
+              type: string
+            resetToken:
+              type: string
+            resetTokenExp:
+              type: string
+
+  responses:
+    200:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            password:
+              type: string
+            imgUrl:
+              type: string
+            gender:
+              type: string
+            status:
+              type: string
+            passwordChangedAt:
+              type: string
+            resetToken:
+              type: string
+            resetTokenExp:
+              type: string
+    201:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            password:
+              type: string
+            imgUrl:
+              type: string
+            gender:
+              type: string
+            status:
+              type: string
+            passwordChangedAt:
+              type: string
+            resetToken:
+              type: string
+            resetTokenExp:
+              type: string
+    401:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    400:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    500:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
